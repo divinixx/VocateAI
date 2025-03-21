@@ -2,75 +2,50 @@ package com.divinixx.vocateai.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.divinixx.vocateai.ui.home.HomeScreen
-import com.divinixx.vocateai.ui.theme.VocateAITheme
+import com.divinixx.vocateai.ui.mbti.MBTIScreen
+import com.divinixx.vocateai.ui.mbti.MBTIResultScreen
+import com.divinixx.vocateai.ui.skills.SkillAssessmentScreen
+//import com.divinixx.vocateai.ui.score.ScoreScreen
 
 @Composable
-fun AppNavHost(navController: NavHostController, startDestination: String = "home_screen") {
+fun AppNavHost(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = "home_screen"
     ) {
         composable("home_screen") {
             HomeScreen(navController)
         }
         
         composable("mbti_screen") {
-            DummyScreen("MBTI Assessment Screen")
+            MBTIScreen(navController)
         }
         
-        composable("interest_screen") {
-            DummyScreen("Interest & Preferences Screen")
+        // Add the MBTI result screen route
+        composable(
+            route = "mbti_result_screen/{mbtiType}",
+            arguments = listOf(navArgument("mbtiType") { type = NavType.StringType })
+        ) {
+            val mbtiType = it.arguments?.getString("mbtiType") ?: "INFP"
+            MBTIResultScreen(navController, mbtiType)
         }
         
-        composable("skill_assessment_screen") {
-            DummyScreen("Skill Assessment Screen")
+        // Keep only one definition for the skill assessment screen
+        composable(
+            route = "skill_assessment_screen/{mbtiType}",
+            arguments = listOf(navArgument("mbtiType") { type = NavType.StringType })
+        ) {
+            val mbtiType = it.arguments?.getString("mbtiType") ?: "INFP" // Default value if null
+            SkillAssessmentScreen(navController, mbtiType)
         }
         
-        composable("score_screen") {
-            DummyScreen("Score & Personality Overview Screen")
-        }
-        
-        composable("career_recommendation_screen") {
-            DummyScreen("Smart Career Recommendation Screen")
-        }
-        
-        composable("roadmap_screen") {
-            DummyScreen("Roadmap Generator Screen")
-        }
-    }
-}
-
-@Composable
-fun DummyScreen(screenName: String) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = screenName,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AppNavHostPreview() {
-    VocateAITheme {
-        val navController = rememberNavController()
-        AppNavHost(navController = navController)
+//        composable("score_screen") {
+//            ScoreScreen()
+//        }
     }
 }

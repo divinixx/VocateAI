@@ -1,145 +1,175 @@
 package com.divinixx.vocateai.ui.home
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.Build
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-
-data class FeatureItem(
-    val title: String,
-    val description: String,
-    val icon: ImageVector,
-    val route: String
-)
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.divinixx.vocateai.R
+import com.divinixx.vocateai.ui.theme.VocateAITheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
-    val featureItems = listOf(
-        FeatureItem(
-            "MBTI Assessment",
-            "Discover your personality type and traits",
-            Icons.Default.AccountBox,  // Changed from Psychology to AccountBox
-            "mbti_screen"
-        ),
-        FeatureItem(
-            "Interest & Preferences",
-            "Explore your interests, values, philosophies, and goals",
-            Icons.Default.Favorite,
-            "interest_screen"
-        ),
-        FeatureItem(
-            "Skill Assessment",
-            "Evaluate your technical, soft, and other skills",
-            Icons.Default.Build,
-            "skill_assessment_screen"
-        ),
-        FeatureItem(
-            "Score & Personality Overview",
-            "View your comprehensive assessment results",
-            Icons.Default.Star, // Changed from Assessment to Star
-            "score_screen"
-        ),
-        FeatureItem(
-            "Smart Career Recommendation",
-            "Get AI-powered career suggestions based on your profile",
-            Icons.Default.Star,  // Changed from WorkOutline to Star
-            "career_recommendation_screen"
-        ),
-        FeatureItem(
-            "Roadmap Generator",
-            "Create a personalized career development plan",
-            Icons.Default.List,  // Changed from Map to List
-            "roadmap_screen"
-        )
-    )
-
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        "Welcome to Kiosk App",
-                        fontWeight = FontWeight.Bold
+                        "Vocate AI",
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 40.sp,
+                        style = MaterialTheme.typography.titleLarge
                     )
                 }
             )
         }
     ) { paddingValues ->
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            items(featureItems) { item ->
-                FeatureCard(
-                    featureItem = item,
-                    onClick = { navController.navigate(item.route) }
+            // User Profile Card
+            UserProfileCard()
+            
+            Spacer(modifier = Modifier.weight(1f))
+            
+            // Start Assessment Button
+            Button(
+                onClick = { navController.navigate("mbti_screen") },
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .height(56.dp),
+                shape = RoundedCornerShape(28.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                )
+            ) {
+                Icon(
+                    imageVector = Icons.Default.PlayArrow,
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Start Assessment",
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
                 )
             }
+            
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
 
 @Composable
-fun FeatureCard(featureItem: FeatureItem, onClick: () -> Unit) {
+fun UserProfileCard() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick),
-        shape = RoundedCornerShape(12.dp),
+            .padding(8.dp),
+        shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(
-                imageVector = featureItem.icon,
-                contentDescription = null,
+            // Profile Image
+            Box(
                 modifier = Modifier
-                    .size(48.dp)
-                    .padding(end = 16.dp)
-            )
-            Column(
-                modifier = Modifier.weight(1f)
+                    .size(120.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.primaryContainer),
+                contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = featureItem.title,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = featureItem.description,
-                    style = MaterialTheme.typography.bodyMedium
+                // Replace with actual user image if available
+                // For now using a placeholder
+                Image(
+                    painter = painterResource(id = R.drawable.profile_placeholder),
+                    contentDescription = "Profile Picture",
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
                 )
             }
-            Icon(
-                imageVector = Icons.Default.ArrowForward,
-                contentDescription = "Navigate",
-                tint = MaterialTheme.colorScheme.primary
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            // User Name
+            Text(
+                text = "divinixx",
+                style = MaterialTheme.typography.headlineMedium,
+                fontWeight = FontWeight.Bold
             )
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            // Email Button
+            OutlinedButton(
+                onClick = { /* Handle email action */ },
+                modifier = Modifier.fillMaxWidth(0.7f),
+                shape = RoundedCornerShape(20.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Email,
+                    contentDescription = "Email",
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "divinixx@gmail.com",
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            // Results Button
+            Button(
+                onClick = { /* Navigate to results */ },
+                modifier = Modifier.fillMaxWidth(0.7f),
+                shape = RoundedCornerShape(20.dp)
+            ) {
+                Text(text = "View Results")
+            }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    VocateAITheme {
+        val navController = rememberNavController()
+        HomeScreen(navController = navController)
     }
 }
