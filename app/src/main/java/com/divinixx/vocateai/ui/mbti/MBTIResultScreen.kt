@@ -1,5 +1,6 @@
 package com.divinixx.vocateai.ui.mbti
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,6 +11,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -415,7 +417,7 @@ fun MBTIResultScreen(navController: NavController, mbtiType: String) {
                         textAlign = TextAlign.Center
                      )
                 }
-            } // Added missing closing brace for the first Card
+             } // Added missing closing brace for the first Card
             
             // Personality Description
             Card(
@@ -525,17 +527,16 @@ fun MBTIResultScreen(navController: NavController, mbtiType: String) {
             
             Spacer(modifier = Modifier.height(24.dp))
             
-            // Continue Button
+            // Continue Button - FIXED NAVIGATION
             Button(
                 onClick = { 
-                    navController.navigate("interest_screen") {
-                        popUpTo("mbti_screen") { inclusive = true }
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                shape = RoundedCornerShape(28.dp)
+                // Correct navigation with parameter
+                navController.navigate("skill_assessment_screen/$mbtiType")
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            shape = RoundedCornerShape(28.dp)
             ) {
                 Text(
                     text = "Continue to Interest Assessment",
@@ -550,6 +551,12 @@ fun MBTIResultScreen(navController: NavController, mbtiType: String) {
             }
             
             Spacer(modifier = Modifier.height(16.dp))
+            
+            // Add this at the bottom of your content column
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            // REMOVE THIS ERRONEOUS NAVIGATION CALL (line 362)
+            // navController.navigate("skill_assessment_screen/$mbtiType")
         }
     }
 }

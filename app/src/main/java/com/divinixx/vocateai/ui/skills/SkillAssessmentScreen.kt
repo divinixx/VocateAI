@@ -439,12 +439,10 @@ fun SkillAssessmentScreen(navController: NavController, mbtiType: String) {
             // Update the Continue button's onClick handler
             Button(
                 onClick = { 
-                    // Navigate to the score screen with the MBTI type
-                    navController.navigate("score_screen/$mbtiType") {
-                        // This will remove the skill assessment screen from the back stack
-                        // but keep the MBTI result screen so users can go back to it
-                        popUpTo("mbti_result_screen/$mbtiType") { inclusive = false }
-                    }   
+                    // Simplify navigation to prevent crashes
+                    // Either comment this out or use a route that exists
+                    navController.navigate("score_screen/$mbtiType")
+                    // Remove the popUpTo call that might be causing issues
                 },
                 modifier = Modifier
                     .fillMaxWidth()
